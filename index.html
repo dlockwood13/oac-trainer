@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>OAC Trainer, PQiP Online Assessment Centre</title>
+<meta name="description" content="Personal practice environment for the PQiP Online Assessment Centre: written test, role play and blended interview drills.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icon-192.png">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#F2F4F3">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0F1715">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="OAC Trainer">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --base:#F2F4F3; --surface:#FFFFFF; --surface2:#EAEFED;
+  --ink:#16211F; --muted:#5A6B67; --line:#D7DEDB;
+  --teal:#0E6B60; --teal-soft:#DCEBE8; --teal-ink:#0A554C;
+  --amber:#8F6210; --amber-soft:#F4E8CE; --amber-strong:#A96E0F;
+  --good:#1E6E3C; --good-soft:#DDEEE2; --warn:#8A3B2A; --warn-soft:#F3E2DC;
+  --focus:#0E6B60;
+  --r-card:14px; --r-btn:10px; --r-chip:999px;
+  --font-display:"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --font-body:"Public Sans",-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --base:#0F1715; --surface:#17221F; --surface2:#1E2C28;
+    --ink:#E7ECEA; --muted:#93A39E; --line:#2A3A35;
+    --teal:#3FA894; --teal-soft:#173730; --teal-ink:#7FCDBE;
+    --amber:#D9A441; --amber-soft:#33290F; --amber-strong:#E5B75F;
+    --good:#5DBB82; --good-soft:#16301F; --warn:#DB8A6E; --warn-soft:#341C14;
+    --focus:#3FA894;
+  }
+}
+:root[data-theme="dark"]{
+  --base:#0F1715; --surface:#17221F; --surface2:#1E2C28;
+  --ink:#E7ECEA; --muted:#93A39E; --line:#2A3A35;
+  --teal:#3FA894; --teal-soft:#173730; --teal-ink:#7FCDBE;
+  --amber:#D9A441; --amber-soft:#33290F; --amber-strong:#E5B75F;
+  --good:#5DBB82; --good-soft:#16301F; --warn:#DB8A6E; --warn-soft:#341C14;
+  --focus:#3FA894;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
+*,*::before,*::after{box-sizing:inherit;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--base); color:var(--ink);
+  font-family:var(--font-body); font-size:16px; line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:var(--font-display); line-height:1.12; margin:0 0 .4em; font-weight:700; letter-spacing:-0.01em;}
+h1{font-size:clamp(1.7rem,4.5vw,2.4rem);}
+h2{font-size:clamp(1.3rem,3.4vw,1.7rem);}
+h3{font-size:1.12rem;}
+p{margin:.35em 0 .8em; max-width:72ch;}
+small,.small{font-size:.86rem; color:var(--muted);}
+a{color:var(--teal-ink);}
+button{font-family:inherit; font-size:1rem; cursor:pointer;}
+:focus-visible{outline:3px solid var(--focus); outline-offset:2px; border-radius:4px;}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important; transition:none!important;}
+}
+
+/* Shell */
+.wrap{max-width:900px; margin:0 auto; padding:0 18px 64px;}
+header.top{
+  position:sticky; top:0; z-index:20; background:var(--base);
+  border-bottom:1px solid var(--line);
+  padding-top:calc(env(safe-area-inset-top,0px) + 10px);
+  margin-top:calc(-1 * env(safe-area-inset-top,0px));
+  padding-bottom:0;
+}
+.brandrow{display:flex; align-items:center; gap:12px; max-width:900px; margin:0 auto; padding:2px 18px 8px;}
+.wordmark{font-family:var(--font-display); font-weight:800; font-size:1.15rem; letter-spacing:-0.01em;}
+.wordmark span{color:var(--teal);}
+.countchip{
+  margin-left:auto; background:var(--amber-soft); color:var(--ink);
+  border:1px solid var(--line); border-radius:var(--r-chip);
+  padding:4px 12px; font-size:.86rem; font-variant-numeric:tabular-nums; white-space:nowrap;
+}
+.themebtn{background:none; border:1px solid var(--line); border-radius:var(--r-chip); padding:4px 10px; color:var(--muted); font-size:.85rem;}
+nav.tabs{max-width:900px; margin:0 auto; padding:0 12px; display:flex; gap:2px; overflow-x:auto; scrollbar-width:none;}
+nav.tabs::-webkit-scrollbar{display:none;}
+nav.tabs button{
+  background:none; border:none; border-bottom:3px solid transparent;
+  padding:8px 12px 10px; color:var(--muted); font-weight:600; white-space:nowrap; font-size:.95rem;
+}
+nav.tabs button[aria-selected="true"]{color:var(--ink); border-bottom-color:var(--teal);}
+main{padding-top:22px;}
+section.view[hidden]{display:none;}
+
+/* Cards and structure */
+.card{background:var(--surface); border:1px solid var(--line); border-radius:var(--r-card); padding:18px 18px 14px; margin:0 0 16px;}
+.card.tealtint{background:var(--teal-soft); border-color:transparent;}
+.card.ambertint{background:var(--amber-soft); border-color:transparent;}
+.grid2{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+@media (max-width:640px){.grid2{grid-template-columns:1fr;}}
+.chip{display:inline-block; border:1px solid var(--line); border-radius:var(--r-chip); padding:1px 10px; font-size:.8rem; color:var(--muted); margin:0 6px 6px 0; background:var(--surface);}
+.chip.beh{color:var(--teal-ink); border-color:var(--teal); background:var(--surface);}
+.btn{
+  display:inline-block; border:1px solid var(--teal); background:var(--teal); color:#fff;
+  border-radius:var(--r-btn); padding:9px 16px; font-weight:600;
+}
+:root[data-theme="dark"] .btn, .btn.darkaware{color:var(--base);}
+.btn.secondary{background:none; color:var(--teal-ink); border-color:var(--teal);}
+.btn.quiet{background:none; color:var(--muted); border-color:var(--line);}
+.btn:disabled{opacity:.45; cursor:default;}
+.btnrow{display:flex; flex-wrap:wrap; gap:10px; margin:10px 0 6px;}
+
+/* Hero */
+.hero{padding:6px 0 4px;}
+.hero .daysleft{
+  font-family:var(--font-display); font-weight:800; letter-spacing:-0.02em;
+  font-size:clamp(2.6rem,9vw,4.2rem); line-height:1; font-variant-numeric:tabular-nums;
+}
+.hero .daysleft em{font-style:normal; color:var(--teal);}
+.hero .sub{color:var(--muted); margin-top:4px;}
+.dateedit{margin-top:8px;}
+.dateedit input{font:inherit; padding:4px 8px; border:1px solid var(--line); border-radius:8px; background:var(--surface); color:var(--ink);}
+
+/* Matrix table */
+table.matrix{width:100%; border-collapse:collapse; font-size:.93rem;}
+table.matrix th, table.matrix td{border:1px solid var(--line); padding:7px 9px; text-align:left; vertical-align:top;}
+table.matrix th{background:var(--surface2); font-family:var(--font-display); font-weight:700;}
+table.matrix td.dot{text-align:center; font-weight:700; color:var(--teal-ink); width:70px;}
+.tablewrap{overflow-x:auto;}
+
+/* Behaviour accordion */
+details.beh{border:1px solid var(--line); border-radius:var(--r-card); background:var(--surface); margin:0 0 10px; padding:0 16px;}
+details.beh summary{cursor:pointer; padding:13px 0; font-family:var(--font-display); font-weight:700; font-size:1.05rem; list-style:none; display:flex; align-items:baseline; gap:10px;}
+details.beh summary::-webkit-details-marker{display:none;}
+details.beh summary .where{margin-left:auto; font-family:var(--font-body); font-weight:400; font-size:.8rem; color:var(--muted); text-align:right;}
+details.beh .inner{padding:0 0 14px; border-top:1px solid var(--line); padding-top:12px;}
+ul.tight{margin:.3em 0 .9em; padding-left:1.15em;}
+ul.tight li{margin:.28em 0;}
+.trap{background:var(--warn-soft); border-radius:10px; padding:10px 12px; margin:8px 0;}
+.trap strong{color:var(--warn);}
+.win{background:var(--good-soft); border-radius:10px; padding:10px 12px; margin:8px 0;}
+.win strong{color:var(--good);}
+
+/* Timer */
+.timerbox{display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin:8px 0 4px;}
+.timernum{
+  font-family:var(--font-display); font-weight:800; font-variant-numeric:tabular-nums;
+  font-size:clamp(2rem,7vw,3rem); line-height:1; min-width:4.4ch;
+}
+.timernum.warning{color:var(--amber-strong);}
+.timernum.done{color:var(--warn);}
+.timerbar{flex:1 1 180px; height:8px; background:var(--surface2); border-radius:6px; overflow:hidden; min-width:140px;}
+.timerbar i{display:block; height:100%; background:var(--amber); width:0%; transition:width .8s linear;}
+.phaselabel{font-size:.9rem; color:var(--muted); width:100%;}
+.phaselabel b{color:var(--ink);}
+
+/* Exercise materials */
+.material{border-left:4px solid var(--teal); background:var(--surface2); border-radius:0 10px 10px 0; padding:10px 14px; margin:10px 0; font-size:.94rem;}
+.material h4{margin-bottom:.25em; font-size:.98rem;}
+.material p{margin:.3em 0;}
+textarea.answer{
+  width:100%; min-height:170px; font:inherit; font-size:.96rem; line-height:1.5;
+  border:1px solid var(--line); border-radius:10px; padding:12px; background:var(--surface); color:var(--ink); resize:vertical;
+}
+.marking{border:1px dashed var(--teal); border-radius:12px; padding:12px 14px; margin:12px 0;}
+.marking h4{color:var(--teal-ink);}
+
+/* Role play options */
+.rp-opener{font-size:1.05rem; background:var(--surface2); border-radius:12px; padding:12px 14px; margin:8px 0 4px;}
+.rp-opener::before{content:"They open with:"; display:block; font-size:.8rem; color:var(--muted); margin-bottom:4px;}
+.dp{margin:16px 0;}
+.dp .prompt{font-weight:600; margin-bottom:8px;}
+.opt{display:block; width:100%; text-align:left; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:10px 12px; margin:0 0 8px; color:var(--ink); line-height:1.45;}
+.opt:not(:disabled):hover{border-color:var(--teal);}
+.opt.picked{border-width:2px;}
+.opt.reg-balanced.picked{border-color:var(--good); background:var(--good-soft);}
+.opt.reg-directive.picked{border-color:var(--warn); background:var(--warn-soft);}
+.opt.reg-avoidant.picked{border-color:var(--amber-strong); background:var(--amber-soft);}
+.optfb{border-radius:10px; padding:10px 12px; margin:2px 0 12px; font-size:.93rem; background:var(--surface2);}
+.optfb .regtag{font-weight:700;}
+.optfb .regtag.balanced{color:var(--good);}
+.optfb .regtag.directive{color:var(--warn);}
+.optfb .regtag.avoidant{color:var(--amber-strong);}
+
+/* Rating dots */
+.rate{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:6px 0;}
+.rate .lbl{min-width:210px; font-size:.92rem;}
+.rate button{
+  width:30px; height:30px; border-radius:50%; border:1px solid var(--line); background:var(--surface); color:var(--muted); font-size:.8rem; font-weight:600;
+}
+.rate button.on{background:var(--teal); border-color:var(--teal); color:#fff;}
+:root[data-theme="dark"] .rate button.on{color:var(--base);}
+
+/* Flashcards */
+.fcard{
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--r-card);
+  padding:26px 20px; min-height:150px; display:flex; flex-direction:column; justify-content:center;
+  font-size:1.08rem; text-align:center;
+}
+.fcard .side{font-size:.78rem; color:var(--muted); margin-bottom:10px;}
+.fcard .txt{white-space:pre-line;}
+.fcount{font-variant-numeric:tabular-nums; color:var(--muted); font-size:.88rem;}
+
+/* Register drill */
+.regpair{margin:0 0 14px;}
+.regpair .before{background:var(--warn-soft); border-radius:10px 10px 0 0; padding:10px 12px;}
+.regpair .before::before{content:"Enforcement register"; display:block; font-size:.78rem; color:var(--warn); font-weight:700; margin-bottom:2px;}
+.regpair .after{background:var(--good-soft); border-radius:0 0 10px 10px; padding:10px 12px;}
+.regpair .after::before{content:"Probation register"; display:block; font-size:.78rem; color:var(--good); font-weight:700; margin-bottom:2px;}
+.regpair .after[hidden]{display:none;}
+
+/* Dashboard bars */
+.bar{display:flex; align-items:center; gap:10px; margin:7px 0;}
+.bar .lbl{min-width:210px; font-size:.9rem;}
+.bar .trk{flex:1; height:10px; background:var(--surface2); border-radius:6px; overflow:hidden;}
+.bar .trk i{display:block; height:100%; background:var(--teal); width:0%;}
+.bar .val{font-variant-numeric:tabular-nums; font-size:.85rem; color:var(--muted); min-width:3ch; text-align:right;}
+
+footer.disc{border-top:1px solid var(--line); margin-top:34px; padding-top:16px; font-size:.84rem; color:var(--muted);}
+footer.disc p{max-width:none;}
+.srconly{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0);}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brandrow">
+    <div class="wordmark">OAC<span>Trainer</span></div>
+    <div class="countchip" id="chipCount">–</div>
+    <button class="themebtn" id="themeBtn" aria-label="Switch colour theme">Auto</button>
+  </div>
+  <nav class="tabs" role="tablist" aria-label="Trainer sections">
+    <button role="tab" aria-selected="true" data-view="today">Today</button>
+    <button role="tab" aria-selected="false" data-view="behaviours">Behaviours</button>
+    <button role="tab" aria-selected="false" data-view="written">Written test</button>
+    <button role="tab" aria-selected="false" data-view="roleplay">Role play</button>
+    <button role="tab" aria-selected="false" data-view="interview">Interview</button>
+    <button role="tab" aria-selected="false" data-view="recall">Recall</button>
+  </nav>
+</header>
+<div class="wrap">
+<main>
+
+<section class="view" id="view-today">
+  <div class="hero">
+    <div class="daysleft"><em id="dayNum">–</em> <span id="dayWord">days</span></div>
+    <p class="sub">until your Online Assessment Centre on <b id="oacDateLabel">Wednesday 7 October 2026</b>. Half day, remote, on the Sova platform: 75 minute written test, 10 minute role play, 42 minute blended interview.</p>
+    <details class="dateedit"><summary class="small">Change assessment date</summary>
+      <label class="small" for="oacDate">Assessment date </label>
+      <input type="date" id="oacDate" value="2026-10-07">
+    </details>
+  </div>
+
+  <div class="card ambertint">
+    <h3>Today's suggested session</h3>
+    <p id="todaySuggest">Loading…</p>
+    <p class="small">Rotation is built on spaced retrieval: short, frequent, mixed sessions beat one long cram. Aim for 25 to 40 minutes daily, always ending with the recall deck.</p>
+  </div>
+
+  <div class="card">
+    <h3>Your self-ratings by behaviour</h3>
+    <p class="small">Averages of the 1 to 5 ratings you log after each drill. These are self-report, so treat them as a steer for what to practise next, not a prediction of your score.</p>
+    <div id="dashBars"></div>
+    <p class="small" id="dashFocus"></p>
+  </div>
+
+  <div class="card">
+    <h3>How the assessment is scored</h3>
+    <p>Six Civil Service behaviours, each assessed in exactly two exercises. No behaviour is single-shot, but Communicating and Influencing and Making Effective Decisions live only in the written test and role play, so those two exercises carry them entirely. Written skills are marked separately in the written test.</p>
+    <div class="tablewrap">
+      <table class="matrix" aria-label="Behaviour to exercise mapping">
+        <thead><tr><th>Behaviour</th><th>Written test</th><th>Role play</th><th>Interview</th></tr></thead>
+        <tbody>
+          <tr><td>Communicating and Influencing</td><td class="dot">●</td><td class="dot">●</td><td class="dot"></td></tr>
+          <tr><td>Making Effective Decisions</td><td class="dot">●</td><td class="dot">●</td><td class="dot"></td></tr>
+          <tr><td>Managing a Quality Service</td><td class="dot">●</td><td class="dot"></td><td class="dot">●</td></tr>
+          <tr><td>Working Together</td><td class="dot">●</td><td class="dot"></td><td class="dot">●</td></tr>
+          <tr><td>Delivering at Pace</td><td class="dot"></td><td class="dot">●</td><td class="dot">●</td></tr>
+          <tr><td>Developing Self and Others</td><td class="dot"></td><td class="dot">●</td><td class="dot">●</td></tr>
+          <tr><td>Written skills (structure, grammar, spelling)</td><td class="dot">●</td><td class="dot"></td><td class="dot"></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card tealtint">
+    <h3>The two traps this app is built around</h3>
+    <p><b>Register.</b> A directive, compliance-first tone reads as enforcement. The mark scheme rewards compassion, affirmation and rapport with risk held quietly in view. The role play module trains the switch deliberately.</p>
+    <p><b>Altitude.</b> Programme-level, consultant-voice examples score worse than practitioner-level ones. Every interview drill here prompts for first person singular: what you personally did with a person, not what you led.</p>
+  </div>
+  <div class="card">
+    <h3>Your data</h3>
+    <p class="small">Answers, ratings and the example bank are stored only in this browser, separately per site and per device. Moving between the hosted version and the installed app means exporting here and importing there. Export once in assessment week as a backup.</p>
+    <div class="btnrow"><button class="btn secondary" id="expBtn">Copy data export</button><button class="btn quiet" id="impShow">Import data</button></div>
+    <div id="impBox" hidden><textarea class="answer" id="impTa" style="min-height:90px" placeholder="Paste an export here, then press Load." aria-label="Paste exported data"></textarea><div class="btnrow"><button class="btn" id="impBtn">Load</button></div></div>
+    <p class="small" id="dataMsg"></p>
+  </div>
+</section>
+
+<section class="view" id="view-behaviours" hidden>
+  <h1>The six behaviours</h1>
+  <p>These are the whole mark scheme. Learn them well enough to recognise which behaviour a task is really testing, then evidence it deliberately. Each card gives you what assessors look for, what weak answers do, and where your own background helps or hurts. Test yourself afterwards in the recall deck.</p>
+  <div id="behList"></div>
+  <div class="card">
+    <h3>Written skills (marked separately)</h3>
+    <p>Clear structure, readable prose, grammar and spelling mostly correct. The official guidance is blunt: if your answer cannot be read, it cannot be marked. Type your drills in this app under time pressure so your error rate at speed is a known quantity before the day.</p>
+  </div>
+</section>
+
+<section class="view" id="view-written" hidden>
+  <h1>Written test</h1>
+  <p>75 minutes on the day: analyse the material presented, respond with brief written summaries. No probation knowledge is expected and none is marked, so never bluff procedure. State principles instead: safety first, verify before concluding, record, escalate to your senior probation officer, keep commitments. Four behaviours plus written skills are scored here.</p>
+  <div class="card ambertint">
+    <h3>Method: SCAN, DECIDE, WRITE</h3>
+    <p><b>Scan</b> (first fifth of the time): read the task question first, then the materials, marking risk, deadlines and people. <b>Decide</b> (one minute): choose your line and your structure before typing. <b>Write</b> (the rest): short paragraphs or clear headed sections, reasoning stated for every decision, two minutes reserved at the end to fix errors. Brief and complete beats long and unfinished.</p>
+  </div>
+  <div id="wtList"></div>
+  <div class="card">
+    <h3>Full simulation</h3>
+    <p>All four tasks back to back against a single 75 minute clock, matching the real format's demand on stamina and time discipline. Do this at least twice before the day, once in the same time slot as your real session.</p>
+    <div class="btnrow"><button class="btn" id="wtSimBtn">Start 75 minute simulation</button></div>
+    <div class="timerbox" id="wtSimTimer" hidden>
+      <div class="timernum" id="wtSimNum">75:00</div>
+      <div class="timerbar"><i id="wtSimBar"></i></div>
+      <div class="phaselabel" id="wtSimPhase"></div>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="view-roleplay" hidden>
+  <h1>Role play</h1>
+  <p>Ten minutes as a trainee probation officer with a person on probation. Assessors want natural responses, not performance, and no job knowledge. What is marked is how you interact: rapport, honesty, judgement and momentum. Work through the decision drills first, then run scenarios free-form against the phased timer, speaking your side aloud.</p>
+  <div class="card ambertint">
+    <h3>The ten minute arc</h3>
+    <p><b>Minutes 0 to 2, connect:</b> greet, open question, listen, reflect back. <b>2 to 6, explore:</b> follow their agenda, affirm genuine positives, gather the facts you need. <b>6 to 8, hold the line:</b> the scenario will push you; be honest about what you must do, without threat. <b>8 to 10, close:</b> a clear decision you can justify, concrete next steps, and a reason to keep engaging.</p>
+    <p class="small">Micro-skills to lean on (OARS): Open questions, Affirmations, Reflective listening, Summaries. You know these from motivational interviewing; the role play is where they earn marks.</p>
+  </div>
+  <div class="card">
+    <h3>Register switch drill</h3>
+    <p>Read the enforcement-register line, say your rewrite aloud, then reveal a probation-register version. The gap between your instinct and the reveal is the training signal.</p>
+    <div id="regList"></div>
+  </div>
+  <div id="rpList"></div>
+</section>
+
+<section class="view" id="view-interview" hidden>
+  <h1>Blended interview</h1>
+  <p>42 minutes, mixing behaviour questions about your past with strengths questions about what motivates and energises you. Personal and professional examples are both welcome. Behaviour answers can and should be prepared; strengths answers cannot, by design, so the drill for those is familiarity with the styles and answering fast with detail and energy.</p>
+  <div class="card ambertint">
+    <h3>Answer shape for behaviour questions</h3>
+    <p>One line of situation, then the bulk on what you personally did, then the result and what it changed. First person singular throughout: I sat with, I asked, I decided. Two rules that never bend: keep every example practitioner-level rather than programme-level, and never reference disputes or negative circumstances around leaving any employer.</p>
+  </div>
+  <div class="card">
+    <h3>Behaviour question bank</h3>
+    <p class="small">Six questions per interview behaviour. Pick one, take the three minute timer, answer aloud, then rate yourself honestly.</p>
+    <div id="ivBank"></div>
+  </div>
+  <div class="card">
+    <h3>Strengths familiarisation</h3>
+    <p>The real assessed strengths are not disclosed and rehearsed answers are exactly what this format is built to see through. These questions copy the four published styles so the format holds no surprises: leading questions mean what they say, there are no hidden meanings, and interviewers may repeat a question. Sixty seconds of thinking is too long; answer as yourself, with detail.</p>
+    <div class="btnrow"><button class="btn" id="stNext">Draw a question</button><button class="btn quiet" id="stTimerBtn">90 second timer</button></div>
+    <div class="fcard" id="stCard"><div class="txt">Press "Draw a question" to begin.</div></div>
+    <div class="timerbox" id="stTimerBox" hidden>
+      <div class="timernum" id="stNum">1:30</div>
+      <div class="timerbar"><i id="stBar"></i></div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Example bank</h3>
+    <p class="small">Two examples per interview behaviour, saved on this device. Headline, one line of context, what you did, the impact. Draw across Navy, policing, analysis roles and the MSc; the spread itself evidences range.</p>
+    <div id="exBank"></div>
+  </div>
+</section>
+
+<section class="view" id="view-recall" hidden>
+  <h1>Recall deck</h1>
+  <p>Retrieval practice on the facts that must be automatic by 7 October: mappings, timings, rules and method. Think your answer, flip, then mark yourself honestly. Cards you miss return sooner; cards you know retire for longer. End every practice day here.</p>
+  <div class="fcard" id="fcCard"><div class="side" id="fcSide">Question</div><div class="txt" id="fcTxt">Press "Start" to begin.</div></div>
+  <div class="btnrow">
+    <button class="btn" id="fcFlip">Start</button>
+    <button class="btn secondary" id="fcAgain" hidden>Missed it</button>
+    <button class="btn secondary" id="fcGood" hidden>Knew it</button>
+  </div>
+  <p class="fcount" id="fcCount"></p>
+</section>
+
+<footer class="disc">
+  <p><b>What this is.</b> A personal practice environment built from the assessment criteria published on the official portal, pqip-ac.co.uk. It is not affiliated with, produced by, or endorsed by HM Prison and Probation Service or the Ministry of Justice, and HMPPS warns that no third-party PQiP preparation material is official or endorsed. Treat this as a training aid; treat the official portal as the source of truth, and re-check it before your assessment date in case details change. Scenarios here are invented for practice and deliberately reflect the sensitive territory the real assessment warns about, handled at a professional level. Everything you type stays in this browser only.</p>
+</footer>
+</main>
+</div>
+<script>
+/* ---------- DATA ---------- */
+const BEHAVIOURS = [
+ {id:"ci", name:"Communicating and Influencing", where:"Written test + Role play",
+  look:["Listens properly and shows it: reflects back, checks understanding.","Adapts style to the audience: plain English for a person on probation, precise and structured for a manager or agency.","Challenges constructively without aggression; builds trust and respect quickly.","In writing: clear, warm where needed, firm where needed, never officious."],
+  weak:["Jargon, acronyms and consultant phrasing.","Talking at people; lecturing; interrupting the role play actor.","One register for every audience."],
+  trap:"Your risk is polish without warmth: briefing-room clarity that reads as distance. Add reflection and acknowledgement before content.",
+  win:"A decade of stakeholder work plus crisis communication from policing is genuine evidence; deliver it in plain, human sentences."},
+ {id:"med", name:"Making Effective Decisions", where:"Written test + Role play",
+  look:["Uses the information actually provided, plus the bigger picture, to reach a judgement.","Names and manages risk explicitly.","Makes a decision rather than deferring everything, and can justify it in one or two sentences.","Verifies before concluding: a single report is a prompt to check, not a verdict."],
+  weak:["Decisions with no stated reasoning.","Ignoring or downplaying risk information.","Overreach: treating unverified information as fact."],
+  trap:"BA habit: presenting options and letting someone else choose. Here you must commit and justify.",
+  win:"Say the quiet part out loud: because, so that, the risk is, I would verify by. Reasoning on the page is what gets marked."},
+ {id:"mqs", name:"Managing a Quality Service", where:"Written test + Interview",
+  look:["Strong work ethic; goes beyond the minimum for the people the service exists for.","Follows rules, guidelines and recording duties even under pressure to bend them.","Represents the organisation well in every interaction.","Spots and suggests improvements to ways of working."],
+  weak:["Bending rules to be liked.","No reference to recording, standards or escalation.","Treating quality as someone else's job."],
+  trap:"Do not confuse quality with process talk. Anchor every example in what it meant for a real person or the public.",
+  win:"Continuous improvement is your native ground; pair one improvement story with one held-the-line-under-pressure story."},
+ {id:"wt", name:"Working Together", where:"Written test + Interview",
+  look:["Builds and keeps good working relationships; supportive team member.","Shares knowledge and information, inside the team and with outside agencies.","Resolves conflict in a developed, adult way.","Thinks multi-agency by default: police, housing, health, courts, victim services."],
+  weak:["Lone-hero answers.","Forgetting the partner agency dimension entirely.","Conflict stories where the other party is simply wrong."],
+  trap:"Seniority leakage lives here: I led a workstream scores worse than I sat down with the housing officer and we agreed.",
+  win:"Joint working with mental health teams while policing is close to the daily reality of probation; use it."},
+ {id:"dap", name:"Delivering at Pace", where:"Role play + Interview",
+  look:["Focused, organised, self-motivated; plans well.","Adapts quickly when the situation changes.","Works under pressure and stays resilient through setbacks.","Steps outside the comfort zone deliberately."],
+  weak:["Pace as rushing: skipping rapport to get through tasks.","Examples about a team's pace rather than your own.","No evidence of recovery after things went wrong."],
+  trap:"In the role play, pace means momentum with warmth: keep the ten minutes moving without making the person feel processed.",
+  win:"The career change itself, an MSc alongside full-time work, is a Delivering at Pace and Developing Self story in one; tell it plainly."},
+ {id:"dso", name:"Developing Self and Others", where:"Role play + Interview",
+  look:["Genuine desire to help and motivate; acts as a positive role model.","Shows compassion; gives praise and positive feedback, out loud.","Empowers people to act rather than fixing everything for them.","Committed to own learning, including academic study."],
+  weak:["Zero affirmations in the role play.","Doing it for them instead of with them.","Own development mentioned nowhere."],
+  trap:"Affirmation is literally on the mark scheme. If you have not praised something real by minute three of a role play, you are leaving marks on the table.",
+  win:"The MSc is direct evidence of dedication to learning; in role plays, catch people doing something right and say so."}
+];
+
+const WT = [
+ {id:"wt1", title:"Task 1: Monday morning inbox", mins:20, behs:["Making Effective Decisions","Managing a Quality Service","Working Together","Communicating and Influencing"],
+  brief:"You are a trainee probation officer. It is 9:05 on Monday. Six items are waiting. You have back-to-back appointments from 11:00.",
+  materials:[
+   {h:"Your six items", p:[
+    "1. Voicemail, 8:47 today: Liam H (on licence, on your caseload) sounds very distressed. He says he was evicted from his hostel this morning, has nowhere to go tonight, and asks you to call back.",
+    "2. Email from a police intelligence analyst: information received that Marcus D may be associating with a named co-defendant, contrary to a licence condition. The analyst asks you to confirm his recent appointment attendance.",
+    "3. Reminder: your section of a pre-sentence report for the Dawes case is due to court by 4:00pm today. It is half drafted.",
+    "4. Message from the duty manager: a colleague is off sick; can you cover a 2:00pm induction appointment for a new person on probation?",
+    "5. Email from a victim liaison officer: the victim in the Khan case has asked for an update on licence conditions; response requested by Friday.",
+    "6. System notice: mandatory information security e-learning must be completed by the end of the week."]}],
+  task:"Set out the order in which you would deal with these items. For each: your action, and one line of reasoning. Finish with anything you would escalate and to whom.",
+  marking:["Risk and immediate welfare first: Liam's homelessness raises both wellbeing and risk, and the police intelligence touches public protection. Strong answers act on both this morning: call Liam back, contact housing or the duty manager about emergency options; check the appointment records and reply to the analyst; flag the intelligence to your senior probation officer the same day.","Statutory deadline protected: the court report is immovable, so strong answers ring-fence time before 4:00pm and say so.","Team support with realism: yes to the 2:00pm cover only if the court deadline still holds, or a negotiated alternative; refusing flatly or accepting blindly both score lower.","Commitments honoured: the victim update is scheduled with a stated day, not left vague; the e-learning is booked for later in the week, lowest priority and said to be so.","Reasoning references risk, deadlines and public protection, not just busyness. Escalation is named: SPO for the intelligence and the housing crisis."],
+  model:"Strong shape: a numbered priority list, one to six, each with action + because. Then two lines: I would inform my SPO today about the intelligence on Marcus D and about Liam's housing situation and any interim plan.",
+  trap:"Do not write a project plan. This is triage, in plain sentences, with risk logic visible."},
+ {id:"wt2", title:"Task 2: Case update for your manager", mins:20, behs:["Communicating and Influencing","Making Effective Decisions"],
+  brief:"Your senior probation officer has asked for a written update on Ryan T before a case discussion this afternoon. Three pieces of information are in front of you.",
+  materials:[
+   {h:"Handover note from previous officer (four weeks old)", p:["Ryan's engagement is mixed. He attends most appointments but missed one without explanation last month. He talks convincingly about wanting work and is frustrated by rejections. Can be dismissive when challenged about his drinking."]},
+   {h:"Email from community alcohol service (this week)", p:["Ryan has attended four of six scheduled sessions. Engagement in sessions is genuinely positive. He disclosed one lapse two weekends ago, which was discussed and a coping plan agreed. He self-referred back promptly, which we regard as a good sign."]},
+   {h:"Letter from a local warehouse employer (yesterday)", p:["We are able to offer Mr T a paid trial shift next week. We require confirmation of his availability and any restrictions on working hours by Thursday."]}],
+  task:"Write a concise update for your SPO covering: current situation, progress, risks or concerns, and your recommended next steps.",
+  marking:["Structure that matches the request: four short headed parts or four tight paragraphs in that order.","Balance: credit and concern in the same document. Strong answers pair the positive alcohol-service engagement and prompt self-referral with the lapse and the earlier missed appointment, without dramatising either.","Risk explicit and proportionate: a lapse plus employment stress is worth naming and monitoring, not worth alarm.","A committed recommendation: confirm the trial shift by Thursday after checking hours against his order requirements, address the missed appointment pattern at the next session, continue alcohol service liaison. Decisions justified in a clause each.","Audience fit: plain, professional, skimmable in under a minute."],
+  model:"Strong shape: Situation (two lines), Progress (two to three lines), Risks (two lines), Next steps (three actions with owners and timing).",
+  trap:"Your instinct will be an options appraisal. Your SPO asked for a position. Give one."},
+ {id:"wt3", title:"Task 3: Reply to a partner agency", mins:15, behs:["Working Together","Communicating and Influencing","Managing a Quality Service"],
+  brief:"An email has arrived from the manager of the supported accommodation where Danny W, on your caseload, lives.",
+  materials:[
+   {h:"Email from housing project manager", p:["I am writing to raise serious concerns about Danny W. Other residents have complained twice this week about noise late at night, and staff found an unauthorised visitor had stayed over on Tuesday, which breaks house rules. Frankly we think he would be better moved on before this gets worse, and we would like probation to support that. Please advise urgently."]}],
+  task:"Draft your reply.",
+  marking:["Tone: professional, appreciative of the report, non-defensive. The relationship with this agency outlasts this email.","Neither colludes nor capitulates: strong answers do not agree to move him on by return, and do not dismiss the concerns either.","Substance: takes the rule breach seriously, commits to raising it with Danny at a stated early appointment, proposes a three-way meeting or call this week, asks for incident details in writing.","Bigger picture on show: notes, tactfully, that stable accommodation supports his progress and that a sudden move can raise risk, so the shared aim is resolving the behaviour first.","Boundaries honest: clear about what probation can and cannot direct, without hiding behind that.","Closes with a concrete follow-up: named next step, named day."],
+  model:"Strong shape: thanks and acknowledgement (one line), what I will do and by when (two to three lines), proposal for joint discussion (one line), shared-aim framing (one line), sign-off.",
+  trap:"Watch the register: this is the one written task where warmth and firmness must live in the same paragraph."},
+ {id:"wt4", title:"Task 4: New risk information", mins:15, behs:["Making Effective Decisions","Managing a Quality Service"],
+  brief:"Colin M is on licence with a condition of no contact, direct or indirect, with his former partner, following convictions for offences against her. This note has just been logged.",
+  materials:[
+   {h:"Note from a housing support worker", p:["While visiting another client this morning, I am fairly sure I saw Colin M walking away from the end of Weaver Street, where I believe his ex-partner lives. He was alone and I did not see any interaction. I thought probation should know. Logged 10:20 today."]}],
+  task:"Set out: your assessment of this information, your immediate actions today, and who you would inform.",
+  marking:["Assessment proportionate: treated seriously as a possible breach of a protective condition, while acknowledging what it is, a single, uncertain sighting with no observed contact. Strong answers hold both without collapsing into either panic or dismissal.","Verification plan: confirm the address is within any exclusion zone, check the exact condition wording, check any monitoring information available, seek any corroboration.","Victim safety leads: informing the victim liaison officer and police so protective measures can be considered comes before, not after, the conversation with Colin.","Immediate actions concrete and same-day: record the information verbatim, inform the SPO today, agree next steps including an early appointment with Colin to address it directly and honestly.","Decision logic visible: because the condition exists to protect a named person, I act on possibility, not proof, while being fair about the uncertainty."],
+  model:"Strong shape: Assessment (three lines: what this may indicate, what is uncertain), Actions today (numbered, four to five), Informing (SPO, victim liaison, police as appropriate) with one line of why.",
+  trap:"Two failure modes: launching recall on a maybe, or filing it for later. The mark is in the middle: urgent, proportionate, protective."}
+];
+
+const REG = [
+ {b:"You need to comply with your conditions or there will be consequences.", a:"The order sets out what we are both working with. Let's look at what is getting in the way of the appointments, because I would rather fix that than end up down the formal route."},
+ {b:"Why did you miss your appointment?", a:"Talk me through what happened on Tuesday."},
+ {b:"I'm warning you, this is your last chance.", a:"I want to be straight with you about where this goes if nothing changes, because I would rather we avoided it together. What would need to be different?"},
+ {b:"That's not my problem.", a:"That is not something I can fix directly, but here is what I can do, and here is who can help with the rest."},
+ {b:"Calm down.", a:"I can see this has really got to you. Take your time, I am listening."},
+ {b:"You've been told about this before.", a:"We have talked about this before, so something is clearly still getting in the way. What is it?"},
+ {b:"If you're lying to me, I'll find out.", a:"It matters that I can rely on what you tell me, because that is what protects the progress you have made. So give it to me straight, even if it is not good news."},
+ {b:"I'll be reporting this.", a:"I do have to record this and share it with my manager. I would rather you heard that from me now. Here is what happens next, and here is what you can do that helps."}
+];
+
+const RP = [
+ {id:"rp1", name:"Jordan, 24: hostile and disengaged", behs:["Communicating and Influencing","Developing Self and Others","Making Effective Decisions","Delivering at Pace"],
+  brief:"Jordan is on a community order and has missed two of his last four appointments. He is 24, recently started casual warehouse work, and has told reception this meeting is pointless. Your aim in ten minutes: rebuild engagement and leave with a workable attendance plan.",
+  opener:"This is a waste of my time. You lot don't do anything for me anyway.",
+  dps:[
+   {prompt:"Your first response:",
+    opts:[
+     {t:"You're on a court order, Jordan. Miss another appointment and I'll be starting breach action, simple as that.", tag:"directive", fb:"Enforcement register. Factually true, tactically wrong at minute one: it confirms his story that this is only about control, and rapport never starts. Communicating and Influencing marks come from listening first; the boundary can land later, and land better."},
+     {t:"That's fine, we can keep this one short today if you want.", tag:"avoidant", fb:"Colluding. You have traded the session's purpose for comfort. Delivering at Pace and Making Effective Decisions both suffer: no plan, no decision, no momentum."},
+     {t:"Sounds like you're pretty fed up. Tell me what's not been working for you.", tag:"balanced", fb:"Reflection plus open question. You have acknowledged the feeling without agreeing with the conclusion, and handed him the floor. This is the register the mark scheme is written for."}]},
+   {prompt:"He softens slightly: \"The appointments clash with my shifts. I finally got work and you lot book me in for the middle of the day.\" Your response:",
+    opts:[
+     {t:"The order comes first. Work has to fit round it, not the other way about.", tag:"directive", fb:"Technically defensible, practically destructive. You have just made the order the enemy of the one protective factor he has. Developing Self and Others rewards the opposite instinct."},
+     {t:"Right, well, just come in whenever suits you and we'll sort it out as we go.", tag:"avoidant", fb:"Warm but formless. No structure means the same failure next month, and you have given away the expectation entirely."},
+     {t:"Holding down that job is a real positive, Jordan, and I don't want appointments to cost you it. Let's find a slot that works with your shifts, and in return I need you to protect that slot. Deal?", tag:"balanced", fb:"Affirmation, flexibility, then a clear mutual expectation. Developing Self and Others, Making Effective Decisions and Delivering at Pace in three sentences."}]},
+   {prompt:"As you wrap up, he says: \"One thing. Last week's one I missed, can you just mark me down as attended? Saves us both the hassle.\" Your response:",
+    opts:[
+     {t:"Absolutely not. Asking me that could land you in even more trouble, so I'd think very carefully.", tag:"directive", fb:"The refusal is right; the threat wrapper undoes the last eight minutes. Firm does not require menacing."},
+     {t:"I'll see what I can do.", tag:"avoidant", fb:"A false promise and an integrity failure. Managing a Quality Service is not scored in this exercise, but honesty is core to Communicating and Influencing, and assessors will read this as it is."},
+     {t:"No, I can't do that, and I'll be honest about why: my records have to be accurate, that's not negotiable. What I can do is note that you came in today and that we've agreed a plan that fits your shifts. That's what will actually help you.", tag:"balanced", fb:"Clear refusal, reason given, respect intact, and the focus returned to what genuinely helps him. This is warm boundary-holding, the single most tested move in the exercise."}]}],
+  debrief:"The arc you were being marked on: connect, explore, hold the line, close with a plan. If your instinct at point one was the breach warning, that is the register trap; log it and run the register drill again tomorrow."},
+ {id:"rp2", name:"Michelle, 38: relapse disclosure", behs:["Communicating and Influencing","Developing Self and Others","Making Effective Decisions","Delivering at Pace"],
+  brief:"Michelle is on licence with an alcohol treatment requirement and has been doing well for three months. She asked for this appointment herself. Your aim: respond to whatever she brings, keep her engaged with treatment, and leave with a concrete plan.",
+  opener:"I need to tell you something before you hear it from someone else. I drank at the weekend. I've ruined everything, haven't I?",
+  dps:[
+   {prompt:"Your first response:",
+    opts:[
+     {t:"You know drinking puts you in breach territory, Michelle. We'll need to look at where this leaves the requirement.", tag:"directive", fb:"You have answered a disclosure with a compliance assessment. She came to you voluntarily; this response teaches her not to next time. The information channel you just damaged is itself a risk control."},
+     {t:"Honestly, these things happen. Try not to dwell on it.", tag:"avoidant", fb:"Kind, and useless. Minimising forecloses the exploration the next eight minutes need, and gives Making Effective Decisions nothing to work with."},
+     {t:"Thank you for telling me, that took courage, and it's the opposite of ruining everything. One difficult weekend after three strong months doesn't erase those months. Tell me what happened.", tag:"balanced", fb:"Affirmation of the disclosure itself, reframing a lapse against the pattern, then an open question. Developing Self and Others scored in the first thirty seconds."}]},
+   {prompt:"She explains: a bad argument with her sister, then feeling completely alone that evening. Your response:",
+    opts:[
+     {t:"Then the answer's simple: keep your distance from your sister for a while.", tag:"directive", fb:"Advice-giving that solves the wrong problem and does it for her. Empowerment, not prescription, is what the behaviour rewards."},
+     {t:"Family, eh. Right, let's get the paperwork side sorted.", tag:"avoidant", fb:"You heard a trigger and a loneliness signal and moved to admin. That is the moment lost."},
+     {t:"So the argument was the spark, but being on your own with it that evening was the harder part. When things have got difficult before, what's actually helped you get through without drinking?", tag:"balanced", fb:"Reflective listening that names the real mechanism, then a question that mines her own strengths. She builds the plan; you scaffold it."}]},
+   {prompt:"Two minutes left. How do you close?",
+    opts:[
+     {t:"I have to be clear that if this happens again there will be consequences, so let's hope it doesn't.", tag:"directive", fb:"A closing threat converts an honest, engaged session into a warning delivered. Nothing concrete was agreed either, so Delivering at Pace goes unevidenced."},
+     {t:"Chin up, keep going, you'll be fine.", tag:"avoidant", fb:"Encouraging noise, no plan, no honesty about recording. Vague closes score vaguely."},
+     {t:"Here's what we'll do. You contact the alcohol team today or tomorrow and tell them what you told me; I'll let them know to expect you. We speak briefly on Friday to check in. I do have to record today honestly, and I'll record all of it, including that you came forward yourself, because that matters. Sound fair?", tag:"balanced", fb:"Concrete steps, timed, shared between you; honesty about recording delivered as respect, not threat; her disclosure explicitly credited. This is a model close."}]}],
+  debrief:"Compassion and structure are not opposites; the marks sit where they meet. If you affirmed nothing out loud, that is the Developing Self and Others gap to fix."},
+ {id:"rp3", name:"Kai, 29: charming, pushing boundaries", behs:["Communicating and Influencing","Developing Self and Others","Making Effective Decisions","Delivering at Pace"],
+  brief:"Kai is six months into a licence period and genuinely progressing: working, attending, no concerns. He is personable and knows it. Your aim: keep the relationship strong while holding an honest line on what you can and cannot promise.",
+  opener:"Six months, not a single missed appointment. Realistically you can sign off on monthly check-ins now, yeah? I'm the easiest case you've got.",
+  dps:[
+   {prompt:"Your first response:",
+    opts:[
+     {t:"Doesn't work like that. The reporting frequency is what it is.", tag:"directive", fb:"Flatly true and needlessly closed. You have declined to engage with a reasonable question and taught him that effort earns nothing, which corrodes Developing Self and Others territory."},
+     {t:"You know what, you probably deserve it. Leave it with me, consider it done.", tag:"avoidant", fb:"You have promised an outcome you do not control. When it does not happen, trust dies. Never trade honesty for likeability; assessors are watching precisely for this."},
+     {t:"Six months of solid engagement is genuinely worth crediting, so let's talk about it properly. I can't promise a change today, that decision sits above me, but I can tell you how it works and what I can do.", tag:"balanced", fb:"Praise that is real, honesty about the limits of your authority, and an offer of process. Confident humility scores; false authority does not."}]},
+   {prompt:"You mention one absence from unpaid work last month. He waves it off: \"That was nothing, the supervisor overreacted.\" Your response:",
+    opts:[
+     {t:"It's not nothing, it's logged, and it's exactly why you're not getting what you're asking for.", tag:"directive", fb:"Weaponising the record ends the conversation you needed to have. Constructive challenge means curiosity first."},
+     {t:"Fair enough, supervisors can be like that.", tag:"avoidant", fb:"Siding against a colleague to keep the room warm. Working Together is not scored in this exercise, but assessors notice collusion everywhere it appears."},
+     {t:"Maybe so, but help me understand what actually happened that day, because if I'm going to make a case for you, that absence is the first thing I'll be asked about.", tag:"balanced", fb:"Challenge framed as advocacy: you have aligned the honest conversation with his own goal. That is influencing, in the mark scheme's exact sense."}]},
+   {prompt:"Closing the session:",
+    opts:[
+     {t:"We'll leave things exactly as they are and review in three months. Next appointment same time next week.", tag:"directive", fb:"A decision with no reasoning and no path scores as administration, not judgement."},
+     {t:"Leave it with me and I'll see what I can sort.", tag:"avoidant", fb:"Vague, unaccountable, and quietly re-promises what you already said you could not promise."},
+     {t:"Here's the deal. I'll raise it with my manager and I'll be honest: strong engagement, one absence we've now talked through. What strengthens your case is eight more weeks of exactly what you've been doing, plus getting your side of that absence to me in writing. Whatever the answer, I'll tell you straight.", tag:"balanced", fb:"A justified decision, a concrete route, his agency engaged, and a commitment to honesty either way. Making Effective Decisions and Delivering at Pace, evidenced in one close."}]}],
+  debrief:"The likeable, progressing person is the subtlest scenario: the trap is not hostility but the wish to be liked. Honest limits, warmly held, are the marks."},
+ {id:"rp4", name:"Steven, 45: disclosure with conditions attached", behs:["Communicating and Influencing","Developing Self and Others","Making Effective Decisions","Delivering at Pace"],
+  brief:"Steven is on licence following convictions for offences within a previous relationship. His licence requires him to disclose any developing relationship. Your aim: respond to what he tells you in a way that keeps him talking, is honest about your duties, and puts safeguarding first.",
+  opener:"There's something I probably should mention. I've been seeing someone, about a month now. Before you make it a big deal: she knows nothing about my past, and it needs to stay that way.",
+  dps:[
+   {prompt:"Your first response:",
+    opts:[
+     {t:"A month? You're required to disclose relationships as they develop, so we're already in breach territory before we start.", tag:"directive", fb:"Leading with the violation punishes the disclosure. The channel through which risk information reaches you is itself a protective factor; this response closes it, which is the opposite of managing risk."},
+     {t:"Your private life is your own business, Steven. Thanks for letting me know.", tag:"avoidant", fb:"A safeguarding condition exists precisely because this is not only his business. Warmth here without follow-up is a Making Effective Decisions failure with real-world stakes."},
+     {t:"I'm glad you've told me, that's exactly the right thing to have done, and I want to keep this a normal conversation. Tell me a bit about her and how you met, and take your time.", tag:"balanced", fb:"Credit the disclosure, lower the temperature, then gather facts calmly: names, how they met, living arrangements, whether children are in the picture. Information first, decisions second."}]},
+   {prompt:"He pushes: \"You're not telling her anything. Promise me that, or I'm saying nothing else.\" Your response:",
+    opts:[
+     {t:"Keep talking like that and I'll be looking at recall, not disclosure.", tag:"directive", fb:"Escalation as a first resort, and a threat you may not even be able to execute. You have converted a frightened question into a confrontation."},
+     {t:"Alright, alright. This stays between us.", tag:"avoidant", fb:"A promise you cannot keep and must not make. When it breaks, and it will, his trust in every professional after you breaks with it. Never promise confidentiality you do not have."},
+     {t:"I won't lie to you, so I can't promise that. Where there's any question of risk, information may need to be shared, and disclosure decisions aren't made by me alone or behind your back. What I can promise is that nothing happens without you knowing, and that telling me today counts in your favour. I know that's hard to hear.", tag:"balanced", fb:"The honest limit, the reason for it, what you can genuinely commit to, and acknowledgement of how it lands. This answer is the exercise: warm boundary-holding under direct pressure."}]},
+   {prompt:"Closing with three minutes left:",
+    opts:[
+     {t:"Right. I'll be referring all this up and you'll be told the outcome. Don't contact her until you hear from us.", tag:"directive", fb:"Possibly close to the eventual actions, delivered as sentence-passing. No engagement is preserved for the follow-up that will matter most."},
+     {t:"Leave it with me, try not to worry, these things usually work themselves out.", tag:"avoidant", fb:"False reassurance about a safeguarding matter. Nothing is agreed, nothing is honest, nothing is safe."},
+     {t:"Here's exactly what happens next. I'll record today's conversation and discuss it with my manager, because that's the proper route, and we'll need to do some checks; that's standard, not a punishment. We'll meet early next week and go through it together. Between now and then, the conditions stay as they are. And Steven, you did the right thing telling me. Keep doing that.", tag:"balanced", fb:"Transparent process, normalised checks, a fixed follow-up, conditions restated without menace, and the disclosure credited one final time. Judgement, honesty and momentum in a single close."}]}],
+  debrief:"The hardest ten minutes in the set, deliberately. The whole scenario turns on one move: refusing a promise while keeping the person in the room. If you promised secrecy anywhere, treat that as the highest-priority correction before assessment day."},
+ {id:"rp5", name:"Aaron, 21: crisis and disengagement threat", behs:["Communicating and Influencing","Developing Self and Others","Making Effective Decisions","Delivering at Pace"],
+  brief:"Aaron is 21, on a community order, with a history of unstable housing. He has arrived without an appointment, agitated. Your aim: de-escalate, deal with the immediate crisis, and protect his engagement with the order.",
+  opener:"I'm done. Hostel's kicked me out, I've got no money till Friday, and you're going to sit there ticking boxes. Why should I even bother coming here?",
+  dps:[
+   {prompt:"Your first response:",
+    opts:[
+     {t:"If you stop attending, you'll be back in court. That's the reality, so sit down and calm down.", tag:"directive", fb:"Two commands and a threat to a person in crisis. Accurate about the consequence, oblivious to the moment. De-escalation is the assessed skill here, and this is its opposite."},
+     {t:"Sounds like a nightmare. Maybe come back next week when things have settled a bit?", tag:"avoidant", fb:"You have sent a homeless 21-year-old away to settle down. The crisis is the appointment."},
+     {t:"Stop, forget the boxes, that can all wait. You showing up here today, with all that going on, is the right call. Where did you sleep last night?", tag:"balanced", fb:"Priorities re-ordered out loud, the act of coming in affirmed, and a concrete, caring question. Delivering at Pace as the mark scheme means it: adapting instantly to what the situation actually needs."}]},
+   {prompt:"He slept on a friend's floor and can maybe stay two more nights. What do you do about housing, now?",
+    opts:[
+     {t:"Here's the number for the council housing team. Give them a ring when you get a chance.", tag:"directive", fb:"A leaflet in verbal form. Signposting a person in crisis to do alone what he is least able to do alone today is action theatre."},
+     {t:"Don't worry, I'll sort all of it, you just sit tight and leave everything with me.", tag:"avoidant", fb:"Rescuing. Kind in the moment, disempowering as a pattern, and it promises delivery you cannot guarantee. With, not for, is the assessed instinct."},
+     {t:"Two nights gives us a window, so let's use it now. We'll ring the housing options team together from here, you talk, I'll back you up on the parts that need my input, and before you leave we'll both know exactly what happens next.", tag:"balanced", fb:"Immediate action, done jointly, his agency kept in the driving seat with your weight behind it. Developing Self and Others and Delivering at Pace in the same sentence."}]},
+   {prompt:"The call is made; he has an assessment appointment tomorrow. Closing:",
+    opts:[
+     {t:"Good. And now that's sorted, about your attendance record on this order...", tag:"directive", fb:"Pivoting straight from his crisis to your agenda tells him the first eight minutes were a transaction. The attendance conversation belongs in the next session, and will go better there because of today."},
+     {t:"Best of luck tomorrow, hope it works out.", tag:"avoidant", fb:"A warm shrug. No follow-up, no next contact, no link back to the order, so the engagement you rebuilt has nowhere to go."},
+     {t:"You handled that call well. So: assessment tomorrow at ten, you ring or text me straight after so I know how it went, and we meet Thursday as planned to take stock properly. Days like today are exactly why keeping in touch with me is worth your while, Aaron. Agreed?", tag:"balanced", fb:"Praise for something specific and real, a tight follow-up loop, the scheduled appointment protected, and the value of engagement demonstrated rather than asserted."}]}],
+  debrief:"Crisis scenarios test whether pace means speed or judgement. The marks go to visible re-prioritisation, joint action, and a close that converts today's help into tomorrow's engagement."}
+];
+
+const IV = [
+ {beh:"Managing a Quality Service", guide:"Anchor every answer in what it meant for a person or the public, not the process. One rule-held story and one improvement story is the ideal pair.",
+  qs:["Tell me about a time you went beyond what was expected of you for a customer or service user.","Describe a time you followed a rule or procedure even though you were under pressure to bend it.","Tell me about a time you improved a way of working. What changed for the people using the service?","Describe a time you maintained standards while working at speed.","Tell me about a difficult interaction where you had to represent your organisation well.","Tell me about feedback you received that raised the quality of your work."]},
+ {beh:"Working Together", guide:"Multi-agency by default: name the other party, what they needed, and what you did to make the relationship work. First person singular, practitioner altitude.",
+  qs:["Describe a time you resolved a conflict within a team.","Tell me about working with another organisation or agency to get something done.","Describe a time you supported a colleague who was struggling.","Tell me about a time you shared knowledge or information that helped others do their job.","Describe a working relationship that started badly. What did you do?","Tell me about a time you disagreed with a team decision. How did you handle it?"]},
+ {beh:"Delivering at Pace", guide:"Your pace, not the team's. Show planning, adaptation, pressure, and recovery after setback. The career change itself is admissible evidence.",
+  qs:["Tell me about a time you delivered something important under real pressure.","Describe a time your plans changed suddenly. What did you do?","Tell me about a time you stepped outside your comfort zone.","Describe how you have juggled competing deadlines. What gave way, and why?","Tell me about a setback that tested your resilience. What kept you going?","Describe a piece of complex work you organised from start to finish."]},
+ {beh:"Developing Self and Others", guide:"Two directions: others (motivated, coached, praised, empowered) and self (the MSc, and what studying it changed in you). Say the praise you gave out loud in the retelling.",
+  qs:["Tell me about a time you motivated someone who was struggling.","Describe giving difficult feedback in a way that helped rather than hurt.","Tell me about a time you acted as a role model. How do you know?","What have you done to develop yourself recently, and why that?","Describe coaching someone to do something rather than doing it for them.","Tell me about praise or positive feedback you gave that made a difference."]}
+];
+
+const ST = [
+ {s:"Leading", q:"Do you enjoy meeting new people? Why is that?"},
+ {s:"Leading", q:"Do you find it easy to stay calm when someone else is upset? Why is that?"},
+ {s:"Leading", q:"Do you like having a clear plan for your day? Why is that?"},
+ {s:"Past-behavioural", q:"Tell me about the last time you kept going with something you found genuinely hard."},
+ {s:"Past-behavioural", q:"When did you last notice someone needed support before they asked for it? What did you do?"},
+ {s:"Past-behavioural", q:"Describe the last time you had to win someone round to your point of view."},
+ {s:"Hypothetical", q:"Imagine several people need your help urgently at the same time tomorrow. How do you decide what to do?"},
+ {s:"Hypothetical", q:"Imagine you receive feedback you disagree with. What do you do?"},
+ {s:"Hypothetical", q:"Imagine your first week in a completely new role. What would you focus on?"},
+ {s:"Statement", q:"\"People can change.\" What do you think?"},
+ {s:"Statement", q:"\"Rules exist for good reasons.\" What do you think?"},
+ {s:"Statement", q:"\"It is better to ask for help than to struggle alone.\" What do you think?"}
+];
+
+const CARDS = [
+ {q:"Which two exercises assess Communicating and Influencing?", a:"Written test and role play.\nNo interview coverage, so these two exercises carry it entirely."},
+ {q:"Which two exercises assess Making Effective Decisions?", a:"Written test and role play."},
+ {q:"Which two exercises assess Managing a Quality Service?", a:"Written test and interview."},
+ {q:"Which two exercises assess Working Together?", a:"Written test and interview."},
+ {q:"Which two exercises assess Delivering at Pace?", a:"Role play and interview."},
+ {q:"Which two exercises assess Developing Self and Others?", a:"Role play and interview."},
+ {q:"Name the four behaviours scored in the written test.", a:"Communicating and Influencing, Making Effective Decisions, Managing a Quality Service, Working Together.\nPlus written skills, marked separately."},
+ {q:"Name the four behaviours scored in the role play.", a:"Communicating and Influencing, Developing Self and Others, Making Effective Decisions, Delivering at Pace."},
+ {q:"Name the four behaviours scored in the interview.", a:"Managing a Quality Service, Working Together, Delivering at Pace, Developing Self and Others."},
+ {q:"Timings: written test, role play, interview?", a:"75 minutes, 10 minutes, 42 minutes.\nHalf-day session, remote, on the Sova platform, breaks between exercises but not during them."},
+ {q:"What is marked under written skills?", a:"Clear structure and formulation, with grammar and spelling mostly correct.\nAn unreadable answer cannot be marked."},
+ {q:"Three rules about strengths questions?", a:"The assessed strengths are not disclosed; questions mean exactly what they say, no hidden meanings; interviewers may repeat a question.\nPersonal and professional examples both allowed. Detail and energy."},
+ {q:"What do assessors say they want in the role play?", a:"Natural responses, based on the information provided.\nNo prior job knowledge is required or assessed."},
+ {q:"OARS stands for?", a:"Open questions, Affirmations, Reflective listening, Summaries."},
+ {q:"The ten minute role play arc?", a:"0 to 2 connect, 2 to 6 explore, 6 to 8 hold the line, 8 to 10 close with a justified decision and next steps."},
+ {q:"The written test method?", a:"Scan (task first, then materials, mark risk, deadlines, people), Decide (choose line and structure), Write (short, reasoned, two minutes saved for corrections)."},
+ {q:"What must you show at the assessment to proceed?", a:"Photographic ID and proof of your qualifying degree.\nWithout photo ID the assessment cannot go ahead."},
+ {q:"When do results arrive, and what follows?", a:"On or after 20 working days: for a 7 October assessment, on or after 4 November 2026.\nProvisional offer pending Enhanced Level 2 vetting and vacancy availability."},
+ {q:"How are placements allocated?", a:"In merit order of assessment scores against available vacancies.\nLocation is never guaranteed, so the target is a high score, not a pass."},
+ {q:"If unsuccessful?", a:"Automatic consideration for a Probation Services Officer role if criteria are met, unless opted out, and re-application at the next campaign."},
+ {q:"The register rule, in one line?", a:"Acknowledge before you assert; affirm before you challenge; explain every boundary; never threaten, never promise what you cannot keep."},
+ {q:"The altitude rule, in one line?", a:"First person singular, practitioner level: what I did with a person, not what I led."}
+];
+</script>
+<script>
+/* ---------- STATE ---------- */
+const store = {
+  read(){ try{ return JSON.parse(localStorage.getItem("pqip-trainer-v1")||"{}"); }catch(e){ return {}; } },
+  write(s){ try{ localStorage.setItem("pqip-trainer-v1", JSON.stringify(s)); }catch(e){} }
+};
+let S = store.read();
+S.ratings = S.ratings || {}; S.wtAns = S.wtAns || {}; S.ex = S.ex || {}; S.fc = S.fc || {miss:{}};
+const save = () => store.write(S);
+const $ = (id) => document.getElementById(id);
+const BNAME = {}; BEHAVIOURS.forEach(b=>BNAME[b.id]=b.name);
+const BID = {}; BEHAVIOURS.forEach(b=>BID[b.name]=b.id);
+
+/* ---------- THEME ---------- */
+const themeBtn = $("themeBtn");
+function applyTheme(){
+  const t = S.theme || "auto";
+  if(t==="auto") document.documentElement.removeAttribute("data-theme");
+  else document.documentElement.setAttribute("data-theme", t);
+  themeBtn.textContent = t==="auto"?"Auto":(t==="light"?"Light":"Dark");
+}
+themeBtn.addEventListener("click", ()=>{
+  S.theme = S.theme==="auto"||!S.theme ? "light" : (S.theme==="light" ? "dark" : "auto");
+  save(); applyTheme();
+});
+applyTheme();
+
+/* ---------- NAV ---------- */
+document.querySelectorAll("nav.tabs button").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    document.querySelectorAll("nav.tabs button").forEach(b=>b.setAttribute("aria-selected","false"));
+    btn.setAttribute("aria-selected","true");
+    document.querySelectorAll("section.view").forEach(v=>v.hidden = true);
+    $("view-"+btn.dataset.view).hidden = false;
+    window.scrollTo({top:0});
+  });
+});
+
+/* ---------- COUNTDOWN + SUGGESTION ---------- */
+const dateInput = $("oacDate");
+if(S.oacDate) dateInput.value = S.oacDate;
+function renderCountdown(){
+  const d = new Date(dateInput.value + "T09:00:00");
+  const now = new Date();
+  const days = Math.ceil((d - now) / 86400000);
+  const fmt = d.toLocaleDateString("en-GB",{weekday:"long", day:"numeric", month:"long", year:"numeric"});
+  $("oacDateLabel").textContent = fmt;
+  if(isNaN(days)){ $("dayNum").textContent="–"; return; }
+  if(days > 0){ $("dayNum").textContent = days; $("dayWord").textContent = days===1?"day":"days"; $("chipCount").textContent = days + (days===1?" day to OAC":" days to OAC"); }
+  else if(days === 0){ $("dayNum").textContent = "Today"; $("dayWord").textContent = ""; $("chipCount").textContent = "OAC today"; }
+  else { $("dayNum").textContent = "Done"; $("dayWord").textContent = ""; $("chipCount").textContent = "OAC complete"; }
+  renderSuggest(days);
+}
+function renderSuggest(days){
+  const el = $("todaySuggest");
+  if(days <= 0){ el.textContent = "Assessment day or after. Nothing new today: logistics, calm, and trust the reps."; return; }
+  if(days <= 2){ el.textContent = "Taper. No new material: 10 recall cards, the register drill once, check your technology against the official checklist, and lay out photo ID plus degree certificate. Early night."; return; }
+  const focus = ["written","roleplay","interview"][days % 3];
+  const plans = {
+    written: "Written focus: one timed task from the written test module (pick your weakest), then the register drill, then 10 recall cards. About 35 minutes.",
+    roleplay: "Role play focus: one scenario's decision drill, then the same scenario free-form against the 10 minute phased timer, spoken aloud, then 10 recall cards. About 30 minutes.",
+    interview: "Interview focus: two behaviour questions answered aloud on the 3 minute timer, three strengths draws on the 90 second timer, tidy one example bank entry, then 10 recall cards. About 30 minutes."
+  };
+  el.textContent = plans[focus] + " Run the full 75 minute written simulation twice before the day, and at least one live mock role play and interview with another person.";
+}
+dateInput.addEventListener("change", ()=>{ S.oacDate = dateInput.value; save(); renderCountdown(); });
+
+/* ---------- RATINGS + DASHBOARD ---------- */
+function rateRow(behId, container, context){
+  const row = document.createElement("div"); row.className="rate";
+  const lbl = document.createElement("span"); lbl.className="lbl"; lbl.textContent = BNAME[behId] || behId;
+  row.appendChild(lbl);
+  for(let n=1;n<=5;n++){
+    const b = document.createElement("button"); b.textContent = n;
+    b.setAttribute("aria-label", "Rate " + (BNAME[behId]||behId) + " " + n + " out of 5" + (context?(" for "+context):""));
+    b.addEventListener("click", ()=>{
+      (S.ratings[behId] = S.ratings[behId] || []).push(n);
+      if(S.ratings[behId].length > 30) S.ratings[behId].shift();
+      save();
+      row.querySelectorAll("button").forEach((x,i)=>x.classList.toggle("on", i < n));
+      renderDash();
+    });
+    row.appendChild(b);
+  }
+  container.appendChild(row);
+}
+function renderDash(){
+  const box = $("dashBars"); box.innerHTML = "";
+  let lowest = null;
+  BEHAVIOURS.forEach(b=>{
+    const arr = S.ratings[b.id] || [];
+    const avg = arr.length ? arr.reduce((a,c)=>a+c,0)/arr.length : 0;
+    if(arr.length && (lowest===null || avg < lowest.avg)) lowest = {name:b.name, avg};
+    const bar = document.createElement("div"); bar.className="bar";
+    bar.innerHTML = '<span class="lbl">'+b.name+'</span><span class="trk"><i style="width:'+(avg/5*100)+'%"></i></span><span class="val">'+(arr.length?avg.toFixed(1):"–")+'</span>';
+    box.appendChild(bar);
+  });
+  $("dashFocus").textContent = lowest ? ("Focus next: " + lowest.name + ". Pick a drill that scores it.") : "No ratings yet. Every drill ends with a self-rating; log them honestly and this panel starts steering your practice.";
+}
+
+/* ---------- TIMER ENGINE ---------- */
+function makeTimer(totalSec, numEl, barEl, phases, phaseEl, onDone){
+  let left = totalSec, iv = null;
+  function paint(){
+    const m = Math.floor(left/60), s = left%60;
+    numEl.textContent = m + ":" + String(s).padStart(2,"0");
+    if(barEl) barEl.style.width = ((totalSec-left)/totalSec*100) + "%";
+    numEl.classList.toggle("warning", left <= totalSec*0.2 && left > 0);
+    numEl.classList.toggle("done", left === 0);
+    if(phases && phaseEl){
+      const gone = totalSec - left;
+      const ph = phases.find(p => gone >= p.from && gone < p.to) || phases[phases.length-1];
+      phaseEl.innerHTML = "Now: <b>" + ph.label + "</b>";
+    }
+  }
+  return {
+    start(){ this.stop(); left = totalSec; paint();
+      iv = setInterval(()=>{ left--; if(left<=0){ left=0; paint(); clearInterval(iv); if(onDone) onDone(); } else paint(); }, 1000); },
+    stop(){ if(iv) clearInterval(iv); }
+  };
+}
+
+/* ---------- BEHAVIOURS VIEW ---------- */
+(function(){
+  const box = $("behList");
+  BEHAVIOURS.forEach(b=>{
+    const d = document.createElement("details"); d.className = "beh";
+    d.innerHTML = '<summary>'+b.name+'<span class="where">'+b.where+'</span></summary>'+
+      '<div class="inner">'+
+      '<p><b>What scores.</b></p><ul class="tight">'+b.look.map(x=>'<li>'+x+'</li>').join("")+'</ul>'+
+      '<p><b>What weak answers do.</b></p><ul class="tight">'+b.weak.map(x=>'<li>'+x+'</li>').join("")+'</ul>'+
+      '<div class="trap"><strong>Your trap. </strong>'+b.trap+'</div>'+
+      '<div class="win"><strong>Your edge. </strong>'+b.win+'</div>'+
+      '</div>';
+    box.appendChild(d);
+  });
+})();
+
+/* ---------- WRITTEN TEST VIEW ---------- */
+(function(){
+  const box = $("wtList");
+  WT.forEach(t=>{
+    const card = document.createElement("div"); card.className = "card";
+    card.innerHTML =
+      '<h3>'+t.title+'</h3>'+
+      '<p>'+t.behs.map(n=>'<span class="chip beh">'+n+'</span>').join("")+'<span class="chip">'+t.mins+' minutes</span></p>'+
+      '<p>'+t.brief+'</p>'+
+      t.materials.map(m=>'<div class="material"><h4>'+m.h+'</h4>'+m.p.map(p=>'<p>'+p+'</p>').join("")+'</div>').join("")+
+      '<p><b>Task.</b> '+t.task+'</p>';
+    const tb = document.createElement("div"); tb.className = "timerbox";
+    tb.innerHTML = '<div class="timernum">'+t.mins+':00</div><div class="timerbar"><i></i></div>';
+    const startBtn = document.createElement("button"); startBtn.className = "btn"; startBtn.textContent = "Start "+t.mins+" minute timer";
+    const timer = makeTimer(t.mins*60, tb.querySelector(".timernum"), tb.querySelector(".timerbar i"), null, null, null);
+    startBtn.addEventListener("click", ()=>timer.start());
+    const ta = document.createElement("textarea"); ta.className = "answer"; ta.setAttribute("aria-label","Your answer for "+t.title);
+    ta.placeholder = "Type your answer here. It saves automatically on this device.";
+    ta.value = S.wtAns[t.id] || "";
+    ta.addEventListener("input", ()=>{ S.wtAns[t.id] = ta.value; save(); });
+    const rev = document.createElement("details"); rev.className = "marking";
+    rev.innerHTML = '<summary><b>Reveal marking guide</b> (only after the timer ends)</summary>'+
+      '<h4>What strong answers do</h4><ul class="tight">'+t.marking.map(m=>'<li>'+m+'</li>').join("")+'</ul>'+
+      '<p><b>Shape of a strong answer.</b> '+t.model+'</p>'+
+      '<div class="trap"><strong>Watch for. </strong>'+t.trap+'</div>'+
+      '<p><b>Now rate yourself</b> against each behaviour, plus written skills, judged only on what is on the page.</p>';
+    const rates = document.createElement("div");
+    t.behs.forEach(n=>rateRow(BID[n], rates, t.title));
+    rev.appendChild(rates);
+    const row = document.createElement("div"); row.className="btnrow"; row.appendChild(startBtn);
+    card.appendChild(row); card.appendChild(tb); card.appendChild(ta); card.appendChild(rev);
+    box.appendChild(card);
+  });
+  const phases = [
+    {from:0,to:1200,label:"Task 1, inbox triage (finish by 20:00)"},
+    {from:1200,to:2400,label:"Task 2, case update (finish by 40:00)"},
+    {from:2400,to:3300,label:"Task 3, agency reply (finish by 55:00)"},
+    {from:3300,to:4200,label:"Task 4, risk information (finish by 70:00)"},
+    {from:4200,to:4500,label:"Final check: read every answer once, fix errors"}
+  ];
+  const sim = makeTimer(4500, $("wtSimNum"), $("wtSimBar"), phases, $("wtSimPhase"), null);
+  $("wtSimBtn").addEventListener("click", ()=>{ $("wtSimTimer").hidden = false; sim.start(); });
+})();
+
+/* ---------- REGISTER DRILL ---------- */
+(function(){
+  const box = $("regList");
+  REG.forEach(p=>{
+    const d = document.createElement("div"); d.className = "regpair";
+    const before = document.createElement("div"); before.className = "before"; before.textContent = p.b;
+    const after = document.createElement("div"); after.className = "after"; after.hidden = true; after.textContent = p.a;
+    const btn = document.createElement("button"); btn.className = "btn quiet"; btn.textContent = "Reveal rewrite"; btn.style.margin = "6px 0 2px";
+    btn.addEventListener("click", ()=>{ after.hidden = false; btn.remove(); });
+    d.appendChild(before); d.appendChild(btn); d.appendChild(after);
+    box.appendChild(d);
+  });
+})();
+
+/* ---------- ROLE PLAY VIEW ---------- */
+(function(){
+  const box = $("rpList");
+  RP.forEach(sc=>{
+    const card = document.createElement("div"); card.className = "card";
+    card.innerHTML = '<h2>'+sc.name+'</h2>'+
+      '<p>'+sc.behs.map(n=>'<span class="chip beh">'+n+'</span>').join("")+'</p>'+
+      '<p><b>Your brief.</b> '+sc.brief+'</p>'+
+      '<div class="rp-opener">"'+sc.opener+'"</div>';
+    sc.dps.forEach((dp,di)=>{
+      const wrap = document.createElement("div"); wrap.className = "dp";
+      const pr = document.createElement("div"); pr.className = "prompt"; pr.textContent = (di+1)+". "+dp.prompt;
+      wrap.appendChild(pr);
+      dp.opts.forEach(o=>{
+        const b = document.createElement("button"); b.className = "opt reg-"+o.tag; b.textContent = '"'+o.t+'"';
+        const fb = document.createElement("div"); fb.className = "optfb"; fb.hidden = true;
+        const tagName = o.tag==="balanced"?"Balanced, probation register":(o.tag==="directive"?"Directive, enforcement register":"Avoidant, colluding register");
+        fb.innerHTML = '<span class="regtag '+o.tag+'">'+tagName+'.</span> '+o.fb;
+        b.addEventListener("click", ()=>{ b.classList.add("picked"); fb.hidden = false; });
+        wrap.appendChild(b); wrap.appendChild(fb);
+      });
+      card.appendChild(wrap);
+    });
+    const deb = document.createElement("div"); deb.className = "win"; deb.innerHTML = "<strong>Debrief. </strong>"+sc.debrief;
+    card.appendChild(deb);
+    const fp = document.createElement("div");
+    fp.innerHTML = '<h3 style="margin-top:14px">Free practice, spoken aloud</h3><p class="small">Run the whole scenario against the phased clock, playing your side out loud. Better with another person reading '+sc.name.split(",")[0]+'; workable alone.</p>';
+    const tb = document.createElement("div"); tb.className = "timerbox";
+    tb.innerHTML = '<div class="timernum">10:00</div><div class="timerbar"><i></i></div><div class="phaselabel"></div>';
+    const timer = makeTimer(600, tb.querySelector(".timernum"), tb.querySelector(".timerbar i"),
+      [{from:0,to:120,label:"Connect: greet, open question, reflect"},
+       {from:120,to:360,label:"Explore: their agenda, affirm, gather facts"},
+       {from:360,to:480,label:"Hold the line: honest, no threats"},
+       {from:480,to:600,label:"Close: justified decision, next steps, keep them engaged"}], tb.querySelector(".phaselabel"), null);
+    const st = document.createElement("button"); st.className = "btn"; st.textContent = "Start 10 minute run";
+    st.addEventListener("click", ()=>timer.start());
+    const row = document.createElement("div"); row.className = "btnrow"; row.appendChild(st);
+    fp.appendChild(row); fp.appendChild(tb);
+    const rr = document.createElement("details"); rr.innerHTML = "<summary><b>Rate this run</b></summary>";
+    const rates = document.createElement("div"); sc.behs.forEach(n=>rateRow(BID[n], rates, sc.name));
+    rr.appendChild(rates); fp.appendChild(rr);
+    card.appendChild(fp);
+    box.appendChild(card);
+  });
+})();
+
+/* ---------- INTERVIEW VIEW ---------- */
+(function(){
+  const bank = $("ivBank");
+  IV.forEach(g=>{
+    const d = document.createElement("details"); d.className = "beh";
+    d.innerHTML = '<summary>'+g.beh+'</summary>';
+    const inner = document.createElement("div"); inner.className = "inner";
+    inner.innerHTML = '<p class="small">'+g.guide+'</p><ul class="tight">'+g.qs.map(q=>'<li>'+q+'</li>').join("")+'</ul>';
+    const tb = document.createElement("div"); tb.className = "timerbox";
+    tb.innerHTML = '<div class="timernum">3:00</div><div class="timerbar"><i></i></div>';
+    const timer = makeTimer(180, tb.querySelector(".timernum"), tb.querySelector(".timerbar i"), null, null, null);
+    const st = document.createElement("button"); st.className = "btn secondary"; st.textContent = "3 minute answer timer";
+    st.addEventListener("click", ()=>timer.start());
+    const row = document.createElement("div"); row.className = "btnrow"; row.appendChild(st);
+    inner.appendChild(row); inner.appendChild(tb);
+    const rates = document.createElement("div"); rateRow(BID[g.beh], rates, "interview practice");
+    inner.appendChild(rates);
+    d.appendChild(inner); bank.appendChild(d);
+  });
+  let lastSt = -1;
+  $("stNext").addEventListener("click", ()=>{
+    let i; do { i = Math.floor(Math.random()*ST.length); } while(i===lastSt && ST.length>1);
+    lastSt = i;
+    $("stCard").innerHTML = '<div class="side">'+ST[i].s+' style</div><div class="txt">'+ST[i].q+'</div>';
+  });
+  const stt = makeTimer(90, $("stNum"), $("stBar"), null, null, null);
+  $("stTimerBtn").addEventListener("click", ()=>{ $("stTimerBox").hidden = false; stt.start(); });
+
+  const ex = $("exBank");
+  IV.forEach(g=>{
+    for(let slot=1; slot<=2; slot++){
+      const key = BID[g.beh]+"_"+slot;
+      const d = document.createElement("details"); d.className = "beh";
+      const saved = S.ex[key] || {};
+      d.innerHTML = '<summary>'+g.beh+', example '+slot+(saved.h?': '+saved.h:'')+'</summary>';
+      const inner = document.createElement("div"); inner.className = "inner";
+      const fields = [["h","Headline (a few words)"],["c","Context, one line only"],["d","What I did, first person singular"],["i","Impact, and what it changed"]];
+      fields.forEach(([k,label])=>{
+        const ta = document.createElement("textarea"); ta.className = "answer"; ta.style.minHeight = (k==="d"?"90px":"48px");
+        ta.placeholder = label; ta.value = saved[k] || "";
+        ta.setAttribute("aria-label", g.beh+" example "+slot+": "+label);
+        ta.addEventListener("input", ()=>{ S.ex[key] = S.ex[key] || {}; S.ex[key][k] = ta.value; save();
+          if(k==="h") d.querySelector("summary").textContent = g.beh+', example '+slot+(ta.value?': '+ta.value:''); });
+        inner.appendChild(ta);
+      });
+      d.appendChild(inner); ex.appendChild(d);
+    }
+  });
+})();
+
+/* ---------- RECALL DECK ---------- */
+(function(){
+  let queue = [], idx = -1, showingA = false;
+  function build(){
+    const missed = Object.keys(S.fc.miss||{}).filter(k=>S.fc.miss[k]>0).map(Number);
+    const rest = CARDS.map((_,i)=>i).filter(i=>!missed.includes(i));
+    for(let i=rest.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [rest[i],rest[j]]=[rest[j],rest[i]]; }
+    queue = missed.concat(rest);
+  }
+  function show(){
+    if(idx >= queue.length){
+      $("fcSide").textContent = "Deck complete";
+      $("fcTxt").textContent = "Done for today. Missed cards lead tomorrow's deck.";
+      $("fcFlip").textContent = "Go again"; $("fcFlip").hidden = false;
+      $("fcAgain").hidden = true; $("fcGood").hidden = true; idx = -1; return;
+    }
+    const c = CARDS[queue[idx]];
+    $("fcSide").textContent = showingA ? "Answer" : "Question";
+    $("fcTxt").textContent = showingA ? c.a : c.q;
+    $("fcCount").textContent = (idx+1) + " of " + queue.length + (Object.values(S.fc.miss||{}).some(v=>v>0) ? " (missed cards lead)" : "");
+    $("fcFlip").hidden = showingA; $("fcAgain").hidden = !showingA; $("fcGood").hidden = !showingA;
+    $("fcFlip").textContent = "Flip";
+  }
+  $("fcFlip").addEventListener("click", ()=>{
+    if(idx === -1){ build(); idx = 0; showingA = false; show(); return; }
+    showingA = true; show();
+  });
+  function advance(missed){
+    const ci = queue[idx];
+    S.fc.miss = S.fc.miss || {};
+    if(missed){ S.fc.miss[ci] = (S.fc.miss[ci]||0)+1; queue.splice(Math.min(idx+3, queue.length), 0, ci); }
+    else { S.fc.miss[ci] = 0; }
+    save(); idx++; showingA = false; show();
+  }
+  $("fcAgain").addEventListener("click", ()=>advance(true));
+  $("fcGood").addEventListener("click", ()=>advance(false));
+})();
+
+/* ---------- DATA EXPORT / IMPORT ---------- */
+(function(){
+  const msg = $("dataMsg");
+  $("expBtn").addEventListener("click", ()=>{
+    const json = JSON.stringify(S);
+    const fallback = ()=>{ $("impBox").hidden = false; const ta = $("impTa"); ta.value = json; ta.focus(); ta.select(); msg.textContent = "Clipboard unavailable here, so copy the text below manually."; };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(json).then(()=>{ msg.textContent = "Export copied to the clipboard. Paste it somewhere safe, or straight into Import on another device."; }).catch(fallback);
+    } else fallback();
+  });
+  $("impShow").addEventListener("click", ()=>{ const b = $("impBox"); b.hidden = !b.hidden; if(!b.hidden){ $("impTa").value = ""; $("impTa").focus(); } });
+  $("impBtn").addEventListener("click", ()=>{
+    try{
+      const parsed = JSON.parse($("impTa").value);
+      if(!parsed || typeof parsed !== "object" || Array.isArray(parsed)) throw new Error("shape");
+      store.write(parsed);
+      msg.textContent = "Data loaded. Reloading.";
+      setTimeout(()=>location.reload(), 500);
+    }catch(e){ msg.textContent = "That doesn't look like a valid export. Paste the exact text produced by Copy data export."; }
+  });
+})();
+
+/* ---------- SERVICE WORKER ---------- */
+if("serviceWorker" in navigator){
+  window.addEventListener("load", ()=>{ try{ navigator.serviceWorker.register("./sw.js").catch(()=>{}); }catch(e){} });
+}
+
+renderCountdown();
+renderDash();
+</script>
+</body>
+</html>

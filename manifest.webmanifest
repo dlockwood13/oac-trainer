@@ -1,0 +1,16 @@
+{
+  "name": "OAC Trainer: PQiP assessment prep",
+  "short_name": "OAC Trainer",
+  "description": "Timed drills for the PQiP Online Assessment Centre: written test, role play, blended interview and recall.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#F2F4F3",
+  "theme_color": "#0E6B60",
+  "icons": [
+    { "src": "./icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "./icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
